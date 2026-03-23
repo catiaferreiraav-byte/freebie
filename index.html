@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Mapa de IA para o teu Negócio | CatIA</title>
+<meta name="description" content="Descobre o que pode ser automatizado em cada área do teu negócio. E o que não pode. Sem promessas vagas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --burgundy-dark: #440403;
+    --burgundy-mid: #5d0f0d;
+    --gold-dark: #d4a84b;
+    --gold-light: #d9c48a;
+    --cream: #f4f0e8;
+    --white: #ffffff;
+    --text-dark: #2a0a09;
+    --text-mid: #5d0f0d;
+    --text-muted: #9a7a79;
+    --green: #1d6b3e;
+    --red-soft: #8b3a2a;
+    --border: rgba(93,15,13,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GATE OVERLAY ── */
+  #gate {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(68,4,3,0.96);
+    backdrop-filter: blur(4px);
+    padding: 1.5rem;
+  }
+
+  .gate-box {
+    background: var(--cream);
+    border-radius: 4px;
+    max-width: 480px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .gate-top {
+    background: var(--burgundy-dark);
+    padding: 2rem 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .gate-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .gate-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .gate-headline em {
+    color: var(--gold-dark);
+    font-style: italic;
+  }
+
+  .gate-sub {
+    font-size: 13px;
+    color: rgba(244,240,232,0.65);
+    line-height: 1.6;
+  }
+
+  .gate-form {
+    padding: 1.75rem 2rem 2rem;
+  }
+
+  .gate-form-label {
+    font-size: 12px;
+    color: var(--text-mid);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    display: block;
+    letter-spacing: 0.3px;
+  }
+
+  .gate-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: var(--white);
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .gate-input:focus {
+    border-color: var(--burgundy-mid);
+  }
+
+  .gate-input::placeholder { color: var(--text-muted); }
+
+  .gate-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold-dark);
+    color: var(--burgundy-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .gate-btn:hover { background: var(--gold-light); }
+  .gate-btn:active { transform: scale(0.99); }
+  .gate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .gate-privacy {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .gate-error {
+    font-size: 12px;
+    color: var(--red-soft);
+    margin-top: -0.5rem;
+    margin-bottom: 0.75rem;
+    display: none;
+  }
+
+  /* ── MAIN PAGE ── */
+  #page { display: none; }
+
+  .hero {
+    background: var(--burgundy-dark);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,75,0.12);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,75,0.08);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.15;
+    max-width: 640px;
+    margin: 0 auto 1rem;
+  }
+
+  .hero h1 em {
+    color: var(--gold-dark);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(244,240,232,0.6);
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .hero-name {
+    margin-top: 1.5rem;
+    font-size: 12px;
+    color: rgba(244,240,232,0.4);
+    letter-spacing: 0.5px;
+  }
+
+  .hero-name strong {
+    color: var(--gold-dark);
+    font-weight: 600;
+  }
+
+  .instruction-bar {
+    background: var(--burgundy-mid);
+    padding: 0.9rem 2rem;
+    text-align: center;
+    font-size: 13px;
+    color: var(--gold-light);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  .total-strip {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .total-text-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .total-sub-label {
+    font-size: 11px;
+    color: var(--gold-dark);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .total-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--burgundy-dark);
+    transition: all 0.3s ease;
+  }
+
+  .progress-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── GRID ── */
+  .areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ── CARD ── */
+  .area-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .area-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold-dark);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .area-card:hover {
+    border-color: rgba(93,15,13,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(68,4,3,0.08);
+  }
+
+  .area-card:hover::before,
+  .area-card.active::before {
+    transform: scaleX(1);
+  }
+
+  .area-card.active {
+    border-color: rgba(93,15,13,0.3);
+    background: #fdfcf8;
+  }
+
+  .card-header {
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    background: rgba(68,4,3,0.05);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .card-title-group { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--burgundy-dark);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .card-hours {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold-dark);
+    letter-spacing: 0.5px;
+  }
+
+  .card-toggle {
+    font-size: 20px;
+    color: var(--burgundy-mid);
+    align-self: center;
+    transition: transform 0.25s ease;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .area-card.active .card-toggle { transform: rotate(45deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid rgba(93,15,13,0.07);
+  }
+
+  .area-card.active .card-body {
+    display: block;
+    animation: slideIn 0.22s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .section-tag.yes {
+    background: rgba(29,107,62,0.08);
+    color: var(--green);
+  }
+
+  .section-tag.no {
+    background: rgba(139,58,42,0.08);
+    color: var(--red-soft);
+  }
+
+  .section-tag.example {
+    background: rgba(212,168,75,0.12);
+    color: #8a6420;
+  }
+
+  .item-list { list-style: none; }
+
+  .item-list li {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-dark);
+    padding: 3px 0 3px 18px;
+    position: relative;
+  }
+
+  .item-list.yes li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 11px;
+    top: 4px;
+  }
+
+  .item-list.no li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    color: var(--red-soft);
+    font-weight: 700;
+    font-size: 14px;
+    top: 2px;
+  }
+
+  .example-box {
+    background: rgba(212,168,75,0.07);
+    border-left: 2px solid var(--gold-dark);
+    padding: 10px 12px;
+    border-radius: 0 3px 3px 0;
+    margin-top: 6px;
+  }
+
+  .example-box p {
+    font-size: 12px;
+    color: #6b4c15;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .savings-row {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(93,15,13,0.07);
+  }
+
+  .savings-row-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .bar-track {
+    background: rgba(93,15,13,0.08);
+    border-radius: 2px;
+    height: 5px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--burgundy-mid), var(--gold-dark));
+    border-radius: 2px;
+    transition: width 0.7s ease;
+  }
+
+  .savings-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--burgundy-dark);
+    margin-top: 5px;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--burgundy-dark);
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .cta-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 3.5vw, 1.9rem);
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+  }
+
+  .cta-sub {
+    font-size: 13px;
+    color: rgba(244,240,232,0.55);
+    max-width: 440px;
+    margin: 0 auto 1.75rem;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold-dark);
+    color: var(--burgundy-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 15px 36px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .cta-btn:hover { background: var(--gold-light); }
+
+  .cta-note {
+    font-size: 11px;
+    color: rgba(244,240,232,0.3);
+    margin-top: 1rem;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--burgundy-dark);
+    border-top: 1px solid rgba(212,168,75,0.15);
+    padding: 1.25rem 2rem;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(244,240,232,0.3);
+  }
+
+  .footer a {
+    color: var(--gold-dark);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-top">
+      <div class="gate-label">CatIA — Soluções de IA para negócios</div>
+      <h2 class="gate-headline">O mapa de IA<br>para o teu negócio.<br><em>Área a área.</em></h2>
+      <p class="gate-sub">Descobre o que pode ser automatizado em cada parte do teu negócio. E o que não pode. Sem jargão. Sem promessas vagas.</p>
+    </div>
+    <div class="gate-form">
+      <label class="gate-form-label" for="gate-name">O teu nome</label>
+      <input class="gate-input" type="text" id="gate-name" placeholder="Como te chamas?" autocomplete="given-name">
+      <label class="gate-form-label" for="gate-email">O teu email</label>
+      <input class="gate-input" type="email" id="gate-email" placeholder="o.teu@email.com" autocomplete="email">
+      <div class="gate-error" id="gate-error"></div>
+      <button class="gate-btn" id="gate-submit" onclick="submitGate()">
+        Ver o mapa completo
+      </button>
+      <p class="gate-privacy">Sem spam. Só informação que vale o teu tempo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div id="page">
+
+  <div class="hero">
+    <div class="hero-label">CatIA — Soluções de IA para negócios</div>
+    <h1>O mapa de IA<br>para o teu negócio.<br><em>Área a área.</em></h1>
+    <p class="hero-sub">O que pode ser automatizado. E o que não pode. Sem modas, sem milagres.</p>
+    <p class="hero-name">Bem-vinda, <strong id="welcome-name"></strong></p>
+  </div>
+
+  <div class="instruction-bar">
+    Clica em cada área para descobrir o potencial de automação no teu negócio.
+  </div>
+
+  <div class="content">
+
+    <div class="total-strip">
+      <div>
+        <div class="total-text-label">Horas recuperáveis por semana</div>
+        <div class="total-sub-label">acumulado das áreas exploradas</div>
+      </div>
+      <div style="text-align:right">
+        <div class="total-number" id="total-hours">0h</div>
+      </div>
+    </div>
+
+    <div class="progress-note" id="progress-note">0 de 6 áreas exploradas</div>
+
+    <div class="areas-grid" id="areas-grid"></div>
+
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-eyebrow">Próximo passo</div>
+    <div class="cta-headline">O número real que o teu<br>negócio está a perder. Em euros.</div>
+    <p class="cta-sub">O mapa mostra o que é possível. O diagnóstico mostra o que está a custar não agires. São 5 minutos. O número vai incomodar.</p>
+    <a class="cta-btn" href="https://diagnosticoiacatia.netlify.app" target="_blank" rel="noopener">Fazer o diagnóstico completo</a>
+    <p class="cta-note">Gratuito. Resultado imediato. Sem conversa de vendas.</p>
+  </div>
+
+  <div class="footer">
+    <p>CatIA por <a href="https://catiaferreiraav.pt" target="_blank">Cátia Ferreira</a> &nbsp;|&nbsp; Soluções de IA para negócios digitais</p>
+  </div>
+
+</div>
+
+<script>
+const areas = [
+  {
+    icon: "💬",
+    title: "Atendimento ao cliente",
+    hours: 6,
+    yes: [
+      "Respostas automáticas a perguntas frequentes",
+      "Triagem e encaminhamento de pedidos",
+      "Follow-up pós-compra sem intervenção humana",
+      "Respostas fora do horário comercial"
+    ],
+    no: [
+      "Situações delicadas que exigem empatia real",
+      "Negociações complexas e casos de exceção",
+      "Gestão de clientes insatisfeitos em crise"
+    ],
+    example: "Uma cliente envia uma pergunta sobre entrega às 23h. A IA responde de imediato com a informação certa. Tu nem sabes que aconteceu."
+  },
+  {
+    icon: "📣",
+    title: "Marketing e conteúdo",
+    hours: 5,
+    yes: [
+      "Primeiros rascunhos de posts e newsletters",
+      "Adaptação de conteúdo para diferentes plataformas",
+      "Agendamento e publicação automática",
+      "Análise de desempenho e relatórios"
+    ],
+    no: [
+      "A voz e o posicionamento da marca",
+      "Decisões estratégicas de campanha",
+      "Relações com parceiros e comunidade"
+    ],
+    example: "Dás à IA as tuas ideias em bruto. Ela devolve três versões de um post. Tu escolhes e ajustas em 5 minutos, não em 45."
+  },
+  {
+    icon: "🤝",
+    title: "Vendas e follow-up",
+    hours: 4,
+    yes: [
+      "Follow-up automático após proposta enviada",
+      "Sequências de nurturing para leads frias",
+      "Qualificação inicial de leads por formulário",
+      "Lembretes e reagendamento automático"
+    ],
+    no: [
+      "A conversa de venda em si",
+      "Negociação de preços e condições",
+      "Construção de relação com clientes estratégicos"
+    ],
+    example: "Um lead preenche o formulário. Recebe uma sequência de 3 emails nos 5 dias seguintes. Tu só entras quando a pessoa está pronta para falar."
+  },
+  {
+    icon: "🗂",
+    title: "Gestão administrativa",
+    hours: 5,
+    yes: [
+      "Emissão automática de faturas e recibos",
+      "Organização e arquivo de documentos",
+      "Lembretes de pagamentos e prazos",
+      "Relatórios semanais automáticos"
+    ],
+    no: [
+      "Decisões financeiras estratégicas",
+      "Contabilidade e fiscalidade",
+      "Contratos com cláusulas sensíveis"
+    ],
+    example: "Cada venda gera automaticamente a fatura, atualiza a folha de controlo e envia o recibo ao cliente. Sem tocar em nada."
+  },
+  {
+    icon: "📊",
+    title: "Análise de dados",
+    hours: 4,
+    yes: [
+      "Dashboards automáticos com métricas-chave",
+      "Alertas quando algo sai do padrão",
+      "Relatórios de desempenho por período",
+      "Cruzamento de dados entre ferramentas"
+    ],
+    no: [
+      "Interpretar o porquê dos resultados",
+      "Decidir o que fazer com a informação",
+      "Contexto de mercado e concorrência"
+    ],
+    example: "Todas as segundas às 8h tens um email com as métricas da semana anterior. Sem abrir spreadsheets, sem calcular nada."
+  },
+  {
+    icon: "⚙️",
+    title: "Operações e processos",
+    hours: 6,
+    yes: [
+      "Onboarding de novos clientes sem intervenção manual",
+      "Notificações e alertas entre sistemas",
+      "Sincronização automática entre ferramentas",
+      "Checklists e fluxos de trabalho automáticos"
+    ],
+    no: [
+      "Processos que exigem julgamento humano",
+      "Exceções e situações não previstas",
+      "Decisões que afetam diretamente a experiência do cliente"
+    ],
+    example: "Um cliente paga. Automaticamente recebe acesso, entra no CRM com a tag certa, e tu recebes uma notificação. Ninguém tocou em nada."
+  }
+];
+
+let explored = new Set();
+let totalHours = 0;
+
+async function submitGate() {
+  const nameEl = document.getElementById('gate-name');
+  const emailEl = document.getElementById('gate-email');
+  const errorEl = document.getElementById('gate-error');
+  const btn = document.getElementById('gate-submit');
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim();
+
+  errorEl.style.display = 'none';
+
+  if (!name) {
+    errorEl.textContent = 'Por favor indica o teu nome.';
+    errorEl.style.display = 'block';
+    nameEl.focus();
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    errorEl.textContent = 'Por favor indica um email válido.';
+    errorEl.style.display = 'block';
+    emailEl.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'A registar...';
+
+  try {
+    const res = await fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('welcome-name').textContent = name.split(' ')[0];
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('page').style.display = 'block';
+      renderAreas();
+    } else {
+      throw new Error(data.error || 'Erro desconhecido');
+    }
+  } catch (err) {
+    errorEl.textContent = 'Algo correu mal. Tenta novamente.';
+    errorEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Ver o mapa completo';
+  }
+}
+
+document.getElementById('gate-email').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitGate();
+});
+
+document.getElementById('gate-name').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('gate-email').focus();
+});
+
+function renderAreas() {
+  const grid = document.getElementById('areas-grid');
+  grid.innerHTML = '';
+
+  areas.forEach((area, i) => {
+    const barPct = Math.round((area.hours / 8) * 100);
+    const card = document.createElement('div');
+    card.className = 'area-card';
+    card.id = 'card-' + i;
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-icon">${area.icon}</div>
+        <div class="card-title-group">
+          <div class="card-title">${area.title}</div>
+          <div class="card-hours">até ${area.hours}h/semana</div>
+        </div>
+        <div class="card-toggle">+</div>
+      </div>
+      <div class="card-body">
+        <span class="section-tag yes">IA faz bem</span>
+        <ul class="item-list yes">${area.yes.map(y => `<li>${y}</li>`).join('')}</ul>
+        <span class="section-tag no">IA não substitui</span>
+        <ul class="item-list no">${area.no.map(n => `<li>${n}</li>`).join('')}</ul>
+        <span class="section-tag example">Na prática</span>
+        <div class="example-box"><p>${area.example}</p></div>
+        <div class="savings-row">
+          <div class="savings-row-label">Potencial de poupança semanal</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
+          <div class="savings-value">até ${area.hours} horas por semana</div>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => toggleCard(i, area));
+    grid.appendChild(card);
+  });
+}
+
+function toggleCard(i, area) {
+  const card = document.getElementById('card-' + i);
+  const isActive = card.classList.contains('active');
+  document.querySelectorAll('.area-card.active').forEach(c => c.classList.remove('active'));
+
+  if (!isActive) {
+    card.classList.add('active');
+    if (!explored.has(i)) {
+      explored.add(i);
+      totalHours += area.hours;
+      document.getElementById('total-hours').textContent = totalHours + 'h';
+      const count = explored.size;
+      document.getElementById('progress-note').textContent =
+        count + ' de 6 áreas exploradas' + (count === 6 ? ' — mapa completo' : '');
+    }
+  }
+}
+</script>
+</body>
+</html>
