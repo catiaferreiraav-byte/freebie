@@ -8,583 +8,86 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --burgundy-dark: #440403;
-    --burgundy-mid: #5d0f0d;
-    --gold-dark: #d4a84b;
-    --gold-light: #d9c48a;
-    --cream: #f4f0e8;
-    --white: #ffffff;
-    --text-dark: #2a0a09;
-    --text-mid: #5d0f0d;
-    --text-muted: #9a7a79;
-    --green: #1d6b3e;
-    --red-soft: #8b3a2a;
-    --border: rgba(93,15,13,0.12);
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--cream);
-    font-family: 'Montserrat', sans-serif;
-    color: var(--text-dark);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── GATE OVERLAY ── */
-  #gate {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(68,4,3,0.96);
-    backdrop-filter: blur(4px);
-    padding: 1.5rem;
-  }
-
-  .gate-box {
-    background: var(--cream);
-    border-radius: 4px;
-    max-width: 480px;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .gate-top {
-    background: var(--burgundy-dark);
-    padding: 2rem 2rem 1.5rem;
-    text-align: center;
-    position: relative;
-  }
-
-  .gate-label {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold-dark);
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .gate-headline {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.3rem, 4vw, 1.8rem);
-    font-weight: 900;
-    color: var(--cream);
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
-  }
-
-  .gate-headline em {
-    color: var(--gold-dark);
-    font-style: italic;
-  }
-
-  .gate-sub {
-    font-size: 13px;
-    color: rgba(244,240,232,0.65);
-    line-height: 1.6;
-  }
-
-  .gate-form {
-    padding: 1.75rem 2rem 2rem;
-  }
-
-  .gate-form-label {
-    font-size: 12px;
-    color: var(--text-mid);
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    display: block;
-    letter-spacing: 0.3px;
-  }
-
-  .gate-input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    color: var(--text-dark);
-    background: var(--white);
-    margin-bottom: 1rem;
-    transition: border-color 0.2s;
-    outline: none;
-    -webkit-appearance: none;
-  }
-
-  .gate-input:focus {
-    border-color: var(--burgundy-mid);
-  }
-
-  .gate-input::placeholder { color: var(--text-muted); }
-
-  .gate-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--gold-dark);
-    color: var(--burgundy-dark);
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-  }
-
-  .gate-btn:hover { background: var(--gold-light); }
-  .gate-btn:active { transform: scale(0.99); }
-  .gate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-  .gate-privacy {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-align: center;
-    margin-top: 0.75rem;
-    line-height: 1.5;
-  }
-
-  .gate-error {
-    font-size: 12px;
-    color: var(--red-soft);
-    margin-top: -0.5rem;
-    margin-bottom: 0.75rem;
-    display: none;
-  }
-
-  /* ── MAIN PAGE ── */
-  #page { display: none; }
-
-  .hero {
-    background: var(--burgundy-dark);
-    padding: 3rem 2rem 2.5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -80px; left: -80px;
-    width: 220px; height: 220px;
-    border-radius: 50%;
-    border: 1px solid rgba(212,168,75,0.12);
-    pointer-events: none;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; right: -60px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    border: 1px solid rgba(212,168,75,0.08);
-    pointer-events: none;
-  }
-
-  .hero-label {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold-dark);
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
-    font-weight: 900;
-    color: var(--cream);
-    line-height: 1.15;
-    max-width: 640px;
-    margin: 0 auto 1rem;
-  }
-
-  .hero h1 em {
-    color: var(--gold-dark);
-    font-style: italic;
-  }
-
-  .hero-sub {
-    font-size: 14px;
-    color: rgba(244,240,232,0.6);
-    max-width: 440px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  .hero-name {
-    margin-top: 1.5rem;
-    font-size: 12px;
-    color: rgba(244,240,232,0.4);
-    letter-spacing: 0.5px;
-  }
-
-  .hero-name strong {
-    color: var(--gold-dark);
-    font-weight: 600;
-  }
-
-  .instruction-bar {
-    background: var(--burgundy-mid);
-    padding: 0.9rem 2rem;
-    text-align: center;
-    font-size: 13px;
-    color: var(--gold-light);
-    letter-spacing: 0.3px;
-  }
-
-  /* ── CONTENT ── */
-  .content {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 1rem;
-  }
-
-  .total-strip {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .total-text-label {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 2px;
-  }
-
-  .total-sub-label {
-    font-size: 11px;
-    color: var(--gold-dark);
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
-
-  .total-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--burgundy-dark);
-    transition: all 0.3s ease;
-  }
-
-  .progress-note {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: right;
-    margin-bottom: 0.75rem;
-  }
-
-  /* ── GRID ── */
-  .areas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-  }
-
-  /* ── CARD ── */
-  .area-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .area-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gold-dark);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-
-  .area-card:hover {
-    border-color: rgba(93,15,13,0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(68,4,3,0.08);
-  }
-
-  .area-card:hover::before,
-  .area-card.active::before {
-    transform: scaleX(1);
-  }
-
-  .area-card.active {
-    border-color: rgba(93,15,13,0.3);
-    background: #fdfcf8;
-  }
-
-  .card-header {
-    padding: 1.25rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .card-icon {
-    width: 42px;
-    height: 42px;
-    background: rgba(68,4,3,0.05);
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .card-title-group { flex: 1; min-width: 0; }
-
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--burgundy-dark);
-    line-height: 1.2;
-    margin-bottom: 4px;
-  }
-
-  .card-hours {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--gold-dark);
-    letter-spacing: 0.5px;
-  }
-
-  .card-toggle {
-    font-size: 20px;
-    color: var(--burgundy-mid);
-    align-self: center;
-    transition: transform 0.25s ease;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .area-card.active .card-toggle { transform: rotate(45deg); }
-
-  .card-body {
-    display: none;
-    padding: 0 1.25rem 1.25rem;
-    border-top: 1px solid rgba(93,15,13,0.07);
-  }
-
-  .area-card.active .card-body {
-    display: block;
-    animation: slideIn 0.22s ease;
-  }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .section-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 2px;
-    margin: 1rem 0 0.5rem;
-  }
-
-  .section-tag.yes {
-    background: rgba(29,107,62,0.08);
-    color: var(--green);
-  }
-
-  .section-tag.no {
-    background: rgba(139,58,42,0.08);
-    color: var(--red-soft);
-  }
-
-  .section-tag.example {
-    background: rgba(212,168,75,0.12);
-    color: #8a6420;
-  }
-
-  .item-list { list-style: none; }
-
-  .item-list li {
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--text-dark);
-    padding: 3px 0 3px 18px;
-    position: relative;
-  }
-
-  .item-list.yes li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--green);
-    font-weight: 700;
-    font-size: 11px;
-    top: 4px;
-  }
-
-  .item-list.no li::before {
-    content: '×';
-    position: absolute;
-    left: 0;
-    color: var(--red-soft);
-    font-weight: 700;
-    font-size: 14px;
-    top: 2px;
-  }
-
-  .example-box {
-    background: rgba(212,168,75,0.07);
-    border-left: 2px solid var(--gold-dark);
-    padding: 10px 12px;
-    border-radius: 0 3px 3px 0;
-    margin-top: 6px;
-  }
-
-  .example-box p {
-    font-size: 12px;
-    color: #6b4c15;
-    line-height: 1.65;
-    font-style: italic;
-  }
-
-  .savings-row {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(93,15,13,0.07);
-  }
-
-  .savings-row-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 6px;
-  }
-
-  .bar-track {
-    background: rgba(93,15,13,0.08);
-    border-radius: 2px;
-    height: 5px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    background: linear-gradient(to right, var(--burgundy-mid), var(--gold-dark));
-    border-radius: 2px;
-    transition: width 0.7s ease;
-  }
-
-  .savings-value {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--burgundy-dark);
-    margin-top: 5px;
-  }
-
-  /* ── CTA ── */
-  .cta-section {
-    background: var(--burgundy-dark);
-    padding: 3rem 2rem;
-    text-align: center;
-    margin-top: 2rem;
-  }
-
-  .cta-eyebrow {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold-dark);
-    font-weight: 700;
-    margin-bottom: 1.25rem;
-  }
-
-  .cta-headline {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.3rem, 3.5vw, 1.9rem);
-    font-weight: 700;
-    color: var(--cream);
-    margin-bottom: 0.75rem;
-    line-height: 1.25;
-  }
-
-  .cta-sub {
-    font-size: 13px;
-    color: rgba(244,240,232,0.55);
-    max-width: 440px;
-    margin: 0 auto 1.75rem;
-    line-height: 1.7;
-  }
-
-  .cta-btn {
-    display: inline-block;
-    background: var(--gold-dark);
-    color: var(--burgundy-dark);
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 15px 36px;
-    border-radius: 2px;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-
-  .cta-btn:hover { background: var(--gold-light); }
-
-  .cta-note {
-    font-size: 11px;
-    color: rgba(244,240,232,0.3);
-    margin-top: 1rem;
-  }
-
-  /* ── FOOTER ── */
-  .footer {
-    background: var(--burgundy-dark);
-    border-top: 1px solid rgba(212,168,75,0.15);
-    padding: 1.25rem 2rem;
-    text-align: center;
-    font-size: 11px;
-    color: rgba(244,240,232,0.3);
-  }
-
-  .footer a {
-    color: var(--gold-dark);
-    text-decoration: none;
-  }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a0800;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(68,4,3,0.97);padding:1.5rem}
+.gate-box{background:#f4f0e8;border-radius:4px;max-width:480px;width:100%;overflow:hidden}
+.gate-top{background:#440403;padding:2rem 2rem 1.5rem;text-align:center}
+.gate-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#d4a84b;font-weight:700;margin-bottom:1rem}
+.gate-headline{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;color:#f4f0e8;line-height:1.2;margin-bottom:.75rem}
+.gate-headline em{color:#d4a84b;font-style:italic}
+.gate-sub{font-size:13px;color:rgba(244,240,232,0.6);line-height:1.6}
+.gate-form{padding:1.75rem 2rem 2rem}
+.gate-form-label{font-size:12px;color:#5d0f0d;font-weight:600;margin-bottom:.4rem;display:block}
+.gate-input{width:100%;padding:12px 14px;border:1px solid rgba(93,15,13,0.2);border-radius:3px;font-family:'Montserrat',sans-serif;font-size:14px;color:#2a0a09;background:#fff;margin-bottom:1rem;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.gate-input:focus{border-color:#5d0f0d}
+.gate-input::placeholder{color:#9a7a79}
+.gate-btn{width:100%;padding:14px;background:#d4a84b;color:#440403;font-family:'Montserrat',sans-serif;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;transition:background .2s}
+.gate-btn:hover{background:#d9c48a}
+.gate-btn:disabled{opacity:.6;cursor:not-allowed}
+.gate-privacy{font-size:11px;color:#9a7a79;text-align:center;margin-top:.75rem;line-height:1.5}
+.gate-error{font-size:12px;color:#8b3a2a;margin-top:-.5rem;margin-bottom:.75rem;display:none}
+
+#page{display:none}
+
+.hero{background:#2a0a09;padding:1.5rem 1.25rem 1.25rem;text-align:center;border-bottom:2px solid #8b6914}
+.hero-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#d4a84b;font-weight:700;margin-bottom:.5rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:900;color:#f4f0e8;line-height:1.15;margin-bottom:.4rem}
+.hero h1 em{color:#d4a84b;font-style:italic}
+.hero-sub{font-size:12px;color:rgba(244,240,232,0.45);line-height:1.6;max-width:360px;margin:0 auto}
+.hero-name{margin-top:1rem;font-size:12px;color:rgba(244,240,232,0.35)}
+.hero-name strong{color:#d4a84b;font-weight:600}
+
+.score-bar{background:#2a0a09;border-bottom:2px solid #8b6914;padding:.7rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.score-label{font-size:10px;color:rgba(212,168,75,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.score-hint{font-size:11px;color:rgba(212,168,75,0.4)}
+.score-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#d4a84b}
+
+.map-frame{margin:.75rem;border:4px solid #8b6914;border-radius:3px;overflow:hidden;background:#d4b896;position:relative}
+.map-frame::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 15%,rgba(90,50,10,0.4) 0%,transparent 40%),radial-gradient(ellipse at 90% 80%,rgba(90,50,10,0.35) 0%,transparent 38%),radial-gradient(ellipse at 80% 10%,rgba(110,65,15,0.25) 0%,transparent 32%),radial-gradient(ellipse at 20% 85%,rgba(90,50,10,0.3) 0%,transparent 35%);pointer-events:none;z-index:2}
+.map-svg{width:100%;display:block;position:relative;z-index:1}
+
+.detail-area{background:#f5ead0;border-top:3px solid #8b6914;display:none}
+.detail-area.open{display:block;animation:openS .22s ease}
+@keyframes openS{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.d-header{background:#440403;padding:.85rem 1rem;display:flex;align-items:center;gap:10px}
+.d-icon-big{font-size:20px}
+.d-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#f4f0e8;flex:1;line-height:1.2}
+.d-close{background:none;border:none;color:rgba(244,240,232,0.45);font-size:22px;cursor:pointer;line-height:1;padding:0}
+.d-close:hover{color:#f4f0e8}
+.d-body{padding:1rem}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:430px){.d-grid{grid-template-columns:1fr}}
+.d-tag{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:1px;display:inline-block;margin-bottom:.5rem}
+.ty{background:rgba(29,107,62,0.1);color:#1d6b3e}
+.tn{background:rgba(139,58,42,0.1);color:#7a2f1a}
+.d-list{list-style:none}
+.d-list li{font-size:12px;color:#3d1f00;line-height:1.6;padding:3px 0 3px 15px;position:relative}
+.yl li::before{content:'✓';position:absolute;left:0;color:#1d6b3e;font-weight:700;font-size:10px;top:4px}
+.nl li::before{content:'×';position:absolute;left:0;color:#7a2f1a;font-weight:700;font-size:13px;top:2px}
+.d-ex{margin-top:.7rem;padding:.7rem .85rem;background:rgba(139,105,20,0.08);border-left:2px solid #d4a84b;font-size:12px;color:#5a3d10;font-style:italic;line-height:1.65}
+.d-hrow{margin-top:.7rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:.65rem;background:rgba(68,4,3,0.04);border-radius:2px}
+.d-bwrap{flex:1;min-width:80px}
+.d-blabel{font-size:9px;color:rgba(61,31,0,0.45);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.d-btrack{background:rgba(139,105,20,0.15);border-radius:1px;height:5px}
+.d-bfill{height:100%;background:#d4a84b;border-radius:1px;transition:width .5s ease}
+.d-hval{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#440403}
+.d-hu{font-size:10px;color:rgba(61,31,0,0.4)}
+
+.cta-area{background:#440403;border-top:2px solid #d4a84b;padding:2rem 1.25rem;text-align:center}
+.cta-ey{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#d4a84b;font-weight:700;margin-bottom:.65rem}
+.cta-h{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3.5vw,1.55rem);font-weight:700;color:#f4f0e8;line-height:1.2;margin-bottom:.45rem}
+.cta-p{font-size:11px;color:rgba(244,240,232,0.45);max-width:340px;margin:0 auto 1.15rem;line-height:1.7}
+.cta-btn{display:inline-block;background:#d4a84b;color:#440403;font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:13px 28px;border-radius:2px;text-decoration:none}
+.cta-btn:hover{background:#d9c48a}
+.cta-note{font-size:10px;color:rgba(244,240,232,0.2);margin-top:.55rem}
+.footer{background:#2a0a09;border-top:1px solid rgba(212,168,75,0.15);padding:1rem 2rem;text-align:center;font-size:11px;color:rgba(244,240,232,0.25)}
+.footer a{color:#d4a84b;text-decoration:none}
 </style>
 </head>
 <body>
 
-<!-- GATE -->
 <div id="gate">
   <div class="gate-box">
     <div class="gate-top">
@@ -598,17 +101,13 @@
       <label class="gate-form-label" for="gate-email">O teu email</label>
       <input class="gate-input" type="email" id="gate-email" placeholder="o.teu@email.com" autocomplete="email">
       <div class="gate-error" id="gate-error"></div>
-      <button class="gate-btn" id="gate-submit" onclick="submitGate()">
-        Ver o mapa completo
-      </button>
+      <button class="gate-btn" id="gate-submit" onclick="submitGate()">Ver o mapa completo</button>
       <p class="gate-privacy">Sem spam. Só informação que vale o teu tempo.</p>
     </div>
   </div>
 </div>
 
-<!-- PAGE -->
 <div id="page">
-
   <div class="hero">
     <div class="hero-label">CatIA — Soluções de IA para negócios</div>
     <h1>O mapa de IA<br>para o teu negócio.<br><em>Área a área.</em></h1>
@@ -616,266 +115,243 @@
     <p class="hero-name">Bem-vinda, <strong id="welcome-name"></strong></p>
   </div>
 
-  <div class="instruction-bar">
-    Clica em cada área para descobrir o potencial de automação no teu negócio.
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Horas recuperáveis/semana</div>
+      <div class="score-hint" id="score-hint">Explora os 6 territórios do mapa</div>
+    </div>
+    <div class="score-val" id="score-val">0h</div>
   </div>
 
-  <div class="content">
+  <div class="map-frame">
+  <svg class="map-svg" viewBox="0 0 420 580" xmlns="http://www.w3.org/2000/svg">
+    <rect width="420" height="580" fill="#d4b896"/>
+    <ellipse cx="55" cy="90" rx="65" ry="55" fill="#a07040" opacity="0.32"/>
+    <ellipse cx="370" cy="60" rx="48" ry="38" fill="#9a6835" opacity="0.25"/>
+    <ellipse cx="385" cy="490" rx="52" ry="58" fill="#a07040" opacity="0.3"/>
+    <ellipse cx="25" cy="500" rx="42" ry="48" fill="#9a6835" opacity="0.26"/>
+    <circle cx="105" cy="72" r="10" fill="#7a5020" opacity="0.2"/>
+    <circle cx="122" cy="62" r="6" fill="#7a5020" opacity="0.16"/>
+    <circle cx="315" cy="445" r="8" fill="#7a5020" opacity="0.18"/>
+    <circle cx="302" cy="458" r="5" fill="#7a5020" opacity="0.14"/>
+    <path d="M90,205 Q105,255 82,305 Q65,345 98,385 Q122,415 110,460 Q102,490 138,515 Q168,532 210,536" stroke="#7a5020" stroke-width="3" fill="none" stroke-dasharray="6,8" stroke-linecap="round" opacity="0.6"/>
+    <path d="M210,536 Q245,530 268,514 Q300,492 298,460 Q298,428 330,405 Q362,382 355,345 Q348,310 368,278 Q385,250 368,218 Q352,190 332,185" stroke="#7a5020" stroke-width="3" fill="none" stroke-dasharray="6,8" stroke-linecap="round" opacity="0.6"/>
+    <g transform="translate(210,100)">
+      <circle cx="0" cy="0" r="56" fill="#c8a870" stroke="#8b6030" stroke-width="2" opacity="0.92"/>
+      <circle cx="0" cy="0" r="44" fill="none" stroke="#8b6030" stroke-width="0.8" opacity="0.45"/>
+      <circle cx="0" cy="0" r="28" fill="#d4b896" stroke="#8b6030" stroke-width="0.8" opacity="0.8"/>
+      <line x1="0" y1="-56" x2="0" y2="-30" stroke="#8b6030" stroke-width="0.8" opacity="0.5"/>
+      <line x1="0" y1="30" x2="0" y2="56" stroke="#8b6030" stroke-width="0.8" opacity="0.5"/>
+      <line x1="-56" y1="0" x2="-30" y2="0" stroke="#8b6030" stroke-width="0.8" opacity="0.5"/>
+      <line x1="30" y1="0" x2="56" y2="0" stroke="#8b6030" stroke-width="0.8" opacity="0.5"/>
+      <line x1="0" y1="-56" x2="39.6" y2="-39.6" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="39.6" y1="-39.6" x2="56" y2="0" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="56" y1="0" x2="39.6" y2="39.6" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="39.6" y1="39.6" x2="0" y2="56" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="0" y1="56" x2="-39.6" y2="39.6" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="-39.6" y1="39.6" x2="-56" y2="0" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="-56" y1="0" x2="-39.6" y2="-39.6" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <line x1="-39.6" y1="-39.6" x2="0" y2="-56" stroke="#8b6030" stroke-width="0.4" opacity="0.28"/>
+      <polygon points="0,-26 5.5,-6 0,-10 -5.5,-6" fill="#5d1a0a"/>
+      <polygon points="0,26 -5.5,6 0,10 5.5,6" fill="#8b6030"/>
+      <polygon points="-26,0 -6,-5.5 -10,0 -6,5.5" fill="#8b6030"/>
+      <polygon points="26,0 6,5.5 10,0 6,-5.5" fill="#8b6030"/>
+      <circle cx="0" cy="0" r="5" fill="#5d1a0a" stroke="#d4a84b" stroke-width="1.5"/>
+      <text x="0" y="-32" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Playfair Display" font-weight="700">N</text>
+      <text x="0" y="44" text-anchor="middle" font-size="10" fill="#3d1500" font-family="Playfair Display">S</text>
+      <text x="-37" y="4" text-anchor="middle" font-size="10" fill="#3d1500" font-family="Playfair Display">W</text>
+      <text x="37" y="4" text-anchor="middle" font-size="10" fill="#3d1500" font-family="Playfair Display">E</text>
+    </g>
+    <g id="t0" onclick="openT(0)" style="cursor:pointer">
+      <circle cx="90" cy="205" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc0"/>
+      <rect x="80" y="193" width="14" height="22" rx="3" fill="none" stroke="#5d1a0a" stroke-width="1.8"/>
+      <line x1="80" y1="197" x2="94" y2="197" stroke="#5d1a0a" stroke-width="1" opacity="0.5"/>
+      <line x1="80" y1="211" x2="94" y2="211" stroke="#5d1a0a" stroke-width="1" opacity="0.5"/>
+      <circle cx="87" cy="213" r="1.5" fill="#5d1a0a" opacity="0.6"/>
+      <path d="M98,196 Q104,200 104,205 Q104,210 98,214" stroke="#5d1a0a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M101,193 Q110,199 110,205 Q110,211 101,217" stroke="#5d1a0a" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.55"/>
+      <text x="90" y="252" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Atendimento</text>
+      <text x="90" y="265" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 6h/sem</text>
+    </g>
+    <g id="t1" onclick="openT(1)" style="cursor:pointer">
+      <circle cx="82" cy="315" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc1"/>
+      <rect x="68" y="304" width="28" height="18" rx="2" fill="none" stroke="#5d1a0a" stroke-width="1.8"/>
+      <rect x="70" y="306" width="24" height="13" rx="1" fill="#5d1a0a" opacity="0.12"/>
+      <line x1="72" y1="309" x2="88" y2="309" stroke="#5d1a0a" stroke-width="1" opacity="0.4"/>
+      <line x1="72" y1="312" x2="84" y2="312" stroke="#5d1a0a" stroke-width="1" opacity="0.3"/>
+      <path d="M63,322 L101,322" stroke="#5d1a0a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M63,322 Q65,325 82,325 Q99,325 101,322" stroke="#5d1a0a" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <rect x="78" y="322" width="8" height="2" rx="1" fill="#5d1a0a" opacity="0.5"/>
+      <text x="82" y="362" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Marketing</text>
+      <text x="82" y="375" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 5h/sem</text>
+    </g>
+    <g id="t2" onclick="openT(2)" style="cursor:pointer">
+      <circle cx="138" cy="505" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc2"/>
+      <path d="M125,498 L138,490 L151,498 L151,512 L138,520 L125,512 Z" fill="none" stroke="#5d1a0a" stroke-width="1.8"/>
+      <path d="M125,498 L138,506 L151,498" stroke="#5d1a0a" stroke-width="1.2" fill="none"/>
+      <line x1="138" y1="506" x2="138" y2="520" stroke="#5d1a0a" stroke-width="1.2"/>
+      <line x1="125" y1="512" x2="138" y2="506" stroke="#5d1a0a" stroke-width="0.8" opacity="0.5"/>
+      <line x1="151" y1="512" x2="138" y2="506" stroke="#5d1a0a" stroke-width="0.8" opacity="0.5"/>
+      <text x="138" y="552" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Vendas</text>
+      <text x="138" y="565" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 4h/sem</text>
+    </g>
+    <g id="t3" onclick="openT(3)" style="cursor:pointer">
+      <circle cx="298" cy="455" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc3"/>
+      <rect x="284" y="441" width="22" height="28" rx="2" fill="none" stroke="#5d1a0a" stroke-width="1.8"/>
+      <path d="M300,441 L300,448 L306,448 L306,441" stroke="#5d1a0a" stroke-width="1.5" fill="none"/>
+      <line x1="287" y1="452" x2="303" y2="452" stroke="#5d1a0a" stroke-width="1.2" opacity="0.6"/>
+      <line x1="287" y1="456" x2="303" y2="456" stroke="#5d1a0a" stroke-width="1.2" opacity="0.5"/>
+      <line x1="287" y1="460" x2="298" y2="460" stroke="#5d1a0a" stroke-width="1.2" opacity="0.4"/>
+      <line x1="287" y1="464" x2="301" y2="464" stroke="#5d1a0a" stroke-width="1.2" opacity="0.35"/>
+      <text x="298" y="502" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Administração</text>
+      <text x="298" y="515" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 5h/sem</text>
+    </g>
+    <g id="t4" onclick="openT(4)" style="cursor:pointer">
+      <circle cx="358" cy="320" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc4"/>
+      <rect x="344" y="307" width="28" height="20" rx="1" fill="none" stroke="#5d1a0a" stroke-width="1.5"/>
+      <rect x="347" y="318" width="4" height="9" rx="0" fill="#5d1a0a" opacity="0.7"/>
+      <rect x="353" y="314" width="4" height="13" rx="0" fill="#5d1a0a" opacity="0.7"/>
+      <rect x="359" y="310" width="4" height="17" rx="0" fill="#5d1a0a" opacity="0.7"/>
+      <rect x="365" y="315" width="4" height="12" rx="0" fill="#5d1a0a" opacity="0.7"/>
+      <line x1="344" y1="327" x2="372" y2="327" stroke="#5d1a0a" stroke-width="1" opacity="0.5"/>
+      <text x="358" y="367" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Dados</text>
+      <text x="358" y="380" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 4h/sem</text>
+    </g>
+    <g id="t5" onclick="openT(5)" style="cursor:pointer">
+      <circle cx="332" cy="205" r="32" fill="#e8d9b0" stroke="#5d1a0a" stroke-width="2.5" id="tc5"/>
+      <circle cx="332" cy="205" r="13" fill="none" stroke="#5d1a0a" stroke-width="2"/>
+      <circle cx="332" cy="205" r="5" fill="#5d1a0a" opacity="0.7"/>
+      <rect x="330" y="188" width="4" height="6" rx="1" fill="#5d1a0a"/>
+      <rect x="330" y="211" width="4" height="6" rx="1" fill="#5d1a0a"/>
+      <rect x="315" y="203" width="6" height="4" rx="1" fill="#5d1a0a"/>
+      <rect x="343" y="203" width="6" height="4" rx="1" fill="#5d1a0a"/>
+      <rect x="319" y="192" width="4" height="6" rx="1" fill="#5d1a0a" transform="rotate(45 321 195)"/>
+      <rect x="341" y="192" width="4" height="6" rx="1" fill="#5d1a0a" transform="rotate(-45 343 195)"/>
+      <rect x="319" y="207" width="4" height="6" rx="1" fill="#5d1a0a" transform="rotate(-45 321 210)"/>
+      <rect x="341" y="207" width="4" height="6" rx="1" fill="#5d1a0a" transform="rotate(45 343 210)"/>
+      <text x="332" y="252" text-anchor="middle" font-size="11" fill="#3d1500" font-family="Montserrat" font-weight="700">Operações</text>
+      <text x="332" y="265" text-anchor="middle" font-size="9" fill="#8b6030" font-family="Montserrat" font-style="italic">até 6h/sem</text>
+    </g>
+    <text x="210" y="565" text-anchor="middle" font-size="8" fill="#8b6030" font-family="Playfair Display" font-style="italic" opacity="0.5">CatIA — Carta de Automação Estratégica</text>
+    <text x="38" y="30" font-size="9" fill="#8b6030" font-family="Playfair Display" font-style="italic" opacity="0.4">O teu negócio inteligente</text>
+    <text x="210" y="575" text-anchor="middle" font-size="7" fill="#8b6030" font-family="Montserrat" opacity="0.35" id="map-prog">Clica em cada território para explorar</text>
+  </svg>
+  </div>
 
-    <div class="total-strip">
-      <div>
-        <div class="total-text-label">Horas recuperáveis por semana</div>
-        <div class="total-sub-label">acumulado das áreas exploradas</div>
+  <div class="detail-area" id="detail-area">
+    <div class="d-header">
+      <span class="d-icon-big" id="d-icon"></span>
+      <div class="d-title" id="d-title"></div>
+      <button class="d-close" onclick="closeDetail()">x</button>
+    </div>
+    <div class="d-body">
+      <div class="d-grid">
+        <div><span class="d-tag ty">IA faz bem</span><ul class="d-list yl" id="d-yes"></ul></div>
+        <div><span class="d-tag tn">IA não substitui</span><ul class="d-list nl" id="d-no"></ul></div>
       </div>
-      <div style="text-align:right">
-        <div class="total-number" id="total-hours">0h</div>
+      <div class="d-ex" id="d-ex"></div>
+      <div class="d-hrow">
+        <div class="d-bwrap">
+          <div class="d-blabel">Poupança potencial semanal</div>
+          <div class="d-btrack"><div class="d-bfill" id="d-bar" style="width:0%"></div></div>
+        </div>
+        <div><div class="d-hval" id="d-hval"></div><div class="d-hu">horas/semana</div></div>
       </div>
     </div>
-
-    <div class="progress-note" id="progress-note">0 de 6 áreas exploradas</div>
-
-    <div class="areas-grid" id="areas-grid"></div>
-
   </div>
 
-  <div class="cta-section">
-    <div class="cta-eyebrow">Próximo passo</div>
-    <div class="cta-headline">O número real que o teu<br>negócio está a perder. Em euros.</div>
-    <p class="cta-sub">O mapa mostra o que é possível. O diagnóstico mostra o que está a custar não agires. São 5 minutos. O número vai incomodar.</p>
-    <a class="cta-btn" href="https://diagnosticoiacatia.netlify.app" target="_blank" rel="noopener">Fazer o diagnóstico completo</a>
-    <p class="cta-note">Gratuito. Resultado imediato. Sem conversa de vendas.</p>
+  <div class="cta-area">
+    <div class="cta-ey">Próximo passo</div>
+    <div class="cta-h">O número real que o teu negócio<br>está a perder. Em euros.</div>
+    <p class="cta-p">O mapa mostra o que é possível. O diagnóstico mostra o que está a custar não agires. São 5 minutos. O número vai incomodar.</p>
+    <a class="cta-btn" href="https://diagnosticoiacatia.netlify.app" target="_blank">Fazer o diagnóstico completo</a>
+    <p class="cta-note">Gratuito. Resultado imediato.</p>
   </div>
 
   <div class="footer">
-    <p>CatIA por <a href="https://catiaferreiraav.pt" target="_blank">Cátia Ferreira</a> &nbsp;|&nbsp; Soluções de IA para negócios digitais</p>
+    <p>CatIA por <a href="https://catiaferreiraav.pt" target="_blank">Catia Ferreira</a> &nbsp;|&nbsp; Soluções de IA para negócios digitais</p>
   </div>
-
 </div>
 
 <script>
-const areas = [
-  {
-    icon: "💬",
-    title: "Atendimento ao cliente",
-    hours: 6,
-    yes: [
-      "Respostas automáticas a perguntas frequentes",
-      "Triagem e encaminhamento de pedidos",
-      "Follow-up pós-compra sem intervenção humana",
-      "Respostas fora do horário comercial"
-    ],
-    no: [
-      "Situações delicadas que exigem empatia real",
-      "Negociações complexas e casos de exceção",
-      "Gestão de clientes insatisfeitos em crise"
-    ],
-    example: "Uma cliente envia uma pergunta sobre entrega às 23h. A IA responde de imediato com a informação certa. Tu nem sabes que aconteceu."
-  },
-  {
-    icon: "📣",
-    title: "Marketing e conteúdo",
-    hours: 5,
-    yes: [
-      "Primeiros rascunhos de posts e newsletters",
-      "Adaptação de conteúdo para diferentes plataformas",
-      "Agendamento e publicação automática",
-      "Análise de desempenho e relatórios"
-    ],
-    no: [
-      "A voz e o posicionamento da marca",
-      "Decisões estratégicas de campanha",
-      "Relações com parceiros e comunidade"
-    ],
-    example: "Dás à IA as tuas ideias em bruto. Ela devolve três versões de um post. Tu escolhes e ajustas em 5 minutos, não em 45."
-  },
-  {
-    icon: "🤝",
-    title: "Vendas e follow-up",
-    hours: 4,
-    yes: [
-      "Follow-up automático após proposta enviada",
-      "Sequências de nurturing para leads frias",
-      "Qualificação inicial de leads por formulário",
-      "Lembretes e reagendamento automático"
-    ],
-    no: [
-      "A conversa de venda em si",
-      "Negociação de preços e condições",
-      "Construção de relação com clientes estratégicos"
-    ],
-    example: "Um lead preenche o formulário. Recebe uma sequência de 3 emails nos 5 dias seguintes. Tu só entras quando a pessoa está pronta para falar."
-  },
-  {
-    icon: "🗂",
-    title: "Gestão administrativa",
-    hours: 5,
-    yes: [
-      "Emissão automática de faturas e recibos",
-      "Organização e arquivo de documentos",
-      "Lembretes de pagamentos e prazos",
-      "Relatórios semanais automáticos"
-    ],
-    no: [
-      "Decisões financeiras estratégicas",
-      "Contabilidade e fiscalidade",
-      "Contratos com cláusulas sensíveis"
-    ],
-    example: "Cada venda gera automaticamente a fatura, atualiza a folha de controlo e envia o recibo ao cliente. Sem tocar em nada."
-  },
-  {
-    icon: "📊",
-    title: "Análise de dados",
-    hours: 4,
-    yes: [
-      "Dashboards automáticos com métricas-chave",
-      "Alertas quando algo sai do padrão",
-      "Relatórios de desempenho por período",
-      "Cruzamento de dados entre ferramentas"
-    ],
-    no: [
-      "Interpretar o porquê dos resultados",
-      "Decidir o que fazer com a informação",
-      "Contexto de mercado e concorrência"
-    ],
-    example: "Todas as segundas às 8h tens um email com as métricas da semana anterior. Sem abrir spreadsheets, sem calcular nada."
-  },
-  {
-    icon: "⚙️",
-    title: "Operações e processos",
-    hours: 6,
-    yes: [
-      "Onboarding de novos clientes sem intervenção manual",
-      "Notificações e alertas entre sistemas",
-      "Sincronização automática entre ferramentas",
-      "Checklists e fluxos de trabalho automáticos"
-    ],
-    no: [
-      "Processos que exigem julgamento humano",
-      "Exceções e situações não previstas",
-      "Decisões que afetam diretamente a experiência do cliente"
-    ],
-    example: "Um cliente paga. Automaticamente recebe acesso, entra no CRM com a tag certa, e tu recebes uma notificação. Ninguém tocou em nada."
-  }
+var areas=[
+  {icon:"X",name:"Atendimento ao cliente",hours:6,yes:["Respostas automáticas a perguntas frequentes","Triagem e encaminhamento de pedidos","Follow-up pós-compra automático","Respostas fora do horário comercial"],no:["Situações delicadas que exigem empatia real","Negociações complexas","Gestão de crises com clientes"],example:"Uma cliente envia uma pergunta às 23h. A IA responde de imediato com a informação certa. Tu nem sabes que aconteceu."},
+  {icon:"Y",name:"Marketing e conteúdo",hours:5,yes:["Primeiros rascunhos de posts e newsletters","Adaptação para diferentes plataformas","Agendamento e publicação automática","Relatórios de desempenho automáticos"],no:["A voz e posicionamento da marca","Decisões estratégicas de campanha","Relações com parceiros e comunidade"],example:"Dás à IA as ideias em bruto. Ela devolve três versões de um post. Tu escolhes em 5 minutos, não em 45."},
+  {icon:"Z",name:"Vendas e follow-up",hours:4,yes:["Follow-up automático após proposta","Sequências de nurturing para leads","Qualificação inicial por formulário","Lembretes e reagendamento automático"],no:["A conversa de venda em si","Negociação de preços e condições","Relação com clientes estratégicos"],example:"Um lead preenche o formulário. Recebe 3 emails ao longo de 5 dias. Tu só entras quando está pronto para falar."},
+  {icon:"W",name:"Gestão administrativa",hours:5,yes:["Emissão automática de faturas","Organização e arquivo de documentos","Lembretes de pagamentos e prazos","Relatórios semanais automáticos"],no:["Decisões financeiras estratégicas","Contabilidade e fiscalidade","Contratos com cláusulas sensíveis"],example:"Cada venda gera a fatura, atualiza o controlo e envia o recibo. Automaticamente. Sem tocar em nada."},
+  {icon:"V",name:"Análise de dados",hours:4,yes:["Dashboards automáticos com métricas","Alertas quando algo sai do padrão","Relatórios de desempenho por período","Cruzamento de dados entre ferramentas"],no:["Interpretar o porquê dos resultados","Decidir o que fazer com a informação","Contexto de mercado e concorrência"],example:"Todas as segundas às 8h tens as métricas da semana no email. Sem abrir spreadsheets, sem calcular nada."},
+  {icon:"U",name:"Operações e processos",hours:6,yes:["Onboarding de clientes sem intervenção","Notificações e alertas entre sistemas","Sincronização automática de ferramentas","Fluxos de trabalho automáticos"],no:["Processos que exigem julgamento humano","Exceções e situações não previstas","Decisões que afetam a experiência do cliente"],example:"Um cliente paga. Recebe acesso, entra no CRM com a tag certa, tu recebes notificação. Ninguém tocou em nada."}
 ];
 
-let explored = new Set();
-let totalHours = 0;
+var explored={},totalHours=0,active=-1;
 
-async function submitGate() {
-  const nameEl = document.getElementById('gate-name');
-  const emailEl = document.getElementById('gate-email');
-  const errorEl = document.getElementById('gate-error');
-  const btn = document.getElementById('gate-submit');
-
-  const name = nameEl.value.trim();
-  const email = emailEl.value.trim();
-
-  errorEl.style.display = 'none';
-
-  if (!name) {
-    errorEl.textContent = 'Por favor indica o teu nome.';
-    errorEl.style.display = 'block';
-    nameEl.focus();
-    return;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    errorEl.textContent = 'Por favor indica um email válido.';
-    errorEl.style.display = 'block';
-    emailEl.focus();
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'A registar...';
-
-  try {
-    const res = await fetch('/.netlify/functions/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      document.getElementById('welcome-name').textContent = name.split(' ')[0];
-      document.getElementById('gate').style.display = 'none';
-      document.getElementById('page').style.display = 'block';
-      renderAreas();
-    } else {
-      throw new Error(data.error || 'Erro desconhecido');
-    }
-  } catch (err) {
-    errorEl.textContent = 'Algo correu mal. Tenta novamente.';
-    errorEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Ver o mapa completo';
+async function submitGate(){
+  var nameEl=document.getElementById('gate-name');
+  var emailEl=document.getElementById('gate-email');
+  var errorEl=document.getElementById('gate-error');
+  var btn=document.getElementById('gate-submit');
+  var name=nameEl.value.trim();
+  var email=emailEl.value.trim();
+  errorEl.style.display='none';
+  if(!name){errorEl.textContent='Por favor indica o teu nome.';errorEl.style.display='block';nameEl.focus();return;}
+  var emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRegex.test(email)){errorEl.textContent='Por favor indica um email válido.';errorEl.style.display='block';emailEl.focus();return;}
+  btn.disabled=true;
+  btn.textContent='A registar...';
+  try{
+    var res=await fetch('/.netlify/functions/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email})});
+    var data=await res.json();
+    if(data.success){
+      document.getElementById('welcome-name').textContent=name.split(' ')[0];
+      document.getElementById('gate').style.display='none';
+      document.getElementById('page').style.display='block';
+    }else{throw new Error(data.error||'Erro');}
+  }catch(err){
+    errorEl.textContent='Algo correu mal. Tenta novamente.';
+    errorEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent='Ver o mapa completo';
   }
 }
 
-document.getElementById('gate-email').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') submitGate();
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('gate-name').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('gate-email').focus();});
+  document.getElementById('gate-email').addEventListener('keydown',function(e){if(e.key==='Enter')submitGate();});
 });
 
-document.getElementById('gate-name').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') document.getElementById('gate-email').focus();
-});
-
-function renderAreas() {
-  const grid = document.getElementById('areas-grid');
-  grid.innerHTML = '';
-
-  areas.forEach((area, i) => {
-    const barPct = Math.round((area.hours / 8) * 100);
-    const card = document.createElement('div');
-    card.className = 'area-card';
-    card.id = 'card-' + i;
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="card-icon">${area.icon}</div>
-        <div class="card-title-group">
-          <div class="card-title">${area.title}</div>
-          <div class="card-hours">até ${area.hours}h/semana</div>
-        </div>
-        <div class="card-toggle">+</div>
-      </div>
-      <div class="card-body">
-        <span class="section-tag yes">IA faz bem</span>
-        <ul class="item-list yes">${area.yes.map(y => `<li>${y}</li>`).join('')}</ul>
-        <span class="section-tag no">IA não substitui</span>
-        <ul class="item-list no">${area.no.map(n => `<li>${n}</li>`).join('')}</ul>
-        <span class="section-tag example">Na prática</span>
-        <div class="example-box"><p>${area.example}</p></div>
-        <div class="savings-row">
-          <div class="savings-row-label">Potencial de poupança semanal</div>
-          <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
-          <div class="savings-value">até ${area.hours} horas por semana</div>
-        </div>
-      </div>
-    `;
-    card.addEventListener('click', () => toggleCard(i, area));
-    grid.appendChild(card);
-  });
+function openT(i){
+  if(active===i){closeDetail();return;}
+  active=i;
+  for(var j=0;j<6;j++){var c=document.getElementById('tc'+j);if(c){c.setAttribute('fill','#e8d9b0');c.setAttribute('stroke','#5d1a0a');c.setAttribute('stroke-width','2.5');}}
+  var c=document.getElementById('tc'+i);
+  if(c){c.setAttribute('fill','#440403');c.setAttribute('stroke','#d4a84b');c.setAttribute('stroke-width','3');}
+  if(!explored[i]){
+    explored[i]=true;totalHours+=areas[i].hours;
+    document.getElementById('score-val').textContent=totalHours+'h';
+    var count=Object.keys(explored).length;
+    var left=6-count;
+    document.getElementById('score-hint').textContent=left>0?left+' territórios por descobrir':'Mapa completo!';
+    document.getElementById('map-prog').textContent=count+' de 6 territórios explorados';
+  }
+  var d=areas[i];
+  document.getElementById('d-icon').textContent=d.icon;
+  document.getElementById('d-title').textContent=d.name;
+  var yesHtml='';for(var k=0;k<d.yes.length;k++)yesHtml+='<li>'+d.yes[k]+'</li>';
+  document.getElementById('d-yes').innerHTML=yesHtml;
+  var noHtml='';for(var k=0;k<d.no.length;k++)noHtml+='<li>'+d.no[k]+'</li>';
+  document.getElementById('d-no').innerHTML=noHtml;
+  document.getElementById('d-ex').textContent=d.example;
+  document.getElementById('d-hval').textContent='até '+d.hours;
+  document.getElementById('d-bar').style.width=Math.round((d.hours/8)*100)+'%';
+  var p=document.getElementById('detail-area');
+  p.className='detail-area open';
+  setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'nearest'});},60);
 }
 
-function toggleCard(i, area) {
-  const card = document.getElementById('card-' + i);
-  const isActive = card.classList.contains('active');
-  document.querySelectorAll('.area-card.active').forEach(c => c.classList.remove('active'));
-
-  if (!isActive) {
-    card.classList.add('active');
-    if (!explored.has(i)) {
-      explored.add(i);
-      totalHours += area.hours;
-      document.getElementById('total-hours').textContent = totalHours + 'h';
-      const count = explored.size;
-      document.getElementById('progress-note').textContent =
-        count + ' de 6 áreas exploradas' + (count === 6 ? ' — mapa completo' : '');
-    }
-  }
+function closeDetail(){
+  active=-1;
+  for(var j=0;j<6;j++){var c=document.getElementById('tc'+j);if(c){c.setAttribute('fill','#e8d9b0');c.setAttribute('stroke','#5d1a0a');c.setAttribute('stroke-width','2.5');}}
+  document.getElementById('detail-area').className='detail-area';
 }
 </script>
 </body>
