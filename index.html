@@ -44,7 +44,7 @@ body{background:#1a0800;font-family:'Montserrat',sans-serif;-webkit-font-smoothi
 .score-hint{font-size:11px;color:rgba(212,168,75,0.4)}
 .score-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#d4a84b}
 
-.map-frame{margin:.75rem;border:4px solid #8b6914;border-radius:3px;overflow:hidden;background:#d4b896;position:relative}
+.map-frame{max-width:600px;margin:.75rem auto;border:4px solid #8b6914;border-radius:3px;overflow:hidden;background:#d4b896;position:relative}
 .map-frame::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 15%,rgba(90,50,10,0.4) 0%,transparent 40%),radial-gradient(ellipse at 90% 80%,rgba(90,50,10,0.35) 0%,transparent 38%),radial-gradient(ellipse at 80% 10%,rgba(110,65,15,0.25) 0%,transparent 32%),radial-gradient(ellipse at 20% 85%,rgba(90,50,10,0.3) 0%,transparent 35%);pointer-events:none;z-index:2}
 .map-svg{width:100%;display:block;position:relative;z-index:1}
 
@@ -124,7 +124,7 @@ body{background:#1a0800;font-family:'Montserrat',sans-serif;-webkit-font-smoothi
   </div>
 
   <div class="map-frame">
-  <svg class="map-svg" viewBox="0 0 420 580" xmlns="http://www.w3.org/2000/svg">
+  <svg class="map-svg" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg">
     <rect width="420" height="580" fill="#d4b896"/>
     <ellipse cx="55" cy="90" rx="65" ry="55" fill="#a07040" opacity="0.32"/>
     <ellipse cx="370" cy="60" rx="48" ry="38" fill="#9a6835" opacity="0.25"/>
